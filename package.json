@@ -8,7 +8,7 @@
     "build": "tsc --build tsconfig.json",
     "dev": "nodemon index.ts",
     "docker:build": "docker build . -t oomi-influxdb-reporter",
-    "docker:run": "docker run --rm --env-file .env --name oomi-influxdb-reporter oomi-influxdb-reporter:latest"
+    "docker:run": "docker run --rm --env-file .env --net=host --name oomi-influxdb-reporter oomi-influxdb-reporter:latest"
   },
   "repository": {
     "type": "git",

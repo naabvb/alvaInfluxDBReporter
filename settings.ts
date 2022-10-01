@@ -7,7 +7,7 @@ export const defaultHeaders = {
 export const influxSettings: InfluxDbSettings = {
   host: process.env.INFLUXDB_HOST || 'localhost',
   port: process.env.INFLUXDB_PORT ? parseInt(process.env.INFLUXDB_PORT) : 8086,
-  protocol: process.env.INFLUXDB_PROTOCOL as InfluxDbProtocol,
+  protocol: process.env.INFLUXDB_PROTOCOL === InfluxDbProtocol.HTTPS ? InfluxDbProtocol.HTTPS : InfluxDbProtocol.HTTP,
   database: process.env.INFLUXDB_DATABASE || 'Electricity',
   username: process.env.INFLUXDB_USERNAME,
   password: process.env.INFLUXDB_PASSWORD,
