@@ -1,7 +1,8 @@
 import { parse } from 'node-html-parser';
 import url from 'url';
 import { fetch } from './fetch';
-import { defaultHeaders } from '../settings';
+import { defaultHeaders, oomiConsumptionRequest } from '../settings';
+import { ConsumptionResponse } from '../interfaces/oomi';
 
 export class OomiDownloader {
   private oomiUsername: string;
@@ -12,55 +13,46 @@ export class OomiDownloader {
     this.oomiPassword = oomiPassword;
   }
 
-  handler = async () => {
+  getData = async (): Promise<[number, number][]> => {
     await this.login();
-    await this.getData();
+    const consumption = await this.getConsumption();
     await this.logout();
+    return consumption;
   };
 
-  login = async () => {
-    const res = await fetch('https://online.oomi.fi/eServices/Online/IndexNoAuth');
-    const body = await res.text();
-    const parsed = parse(body);
-    const verificationToken = parsed.querySelector('input[name=__RequestVerificationToken]')?.attributes.value;
+  login = async (): Promise<void> => {
+    const indexResponse = await fetch('https://online.oomi.fi/eServices/Online/IndexNoAuth');
+    const responseBody = await indexResponse.text();
+    const parsedHtml = parse(responseBody);
+    const verificationToken = parsedHtml.querySelector('input[name=__RequestVerificationToken]')?.attributes.value;
     if (verificationToken) {
-      const params = {
+      const loginParameters = {
         __RequestVerificationToken: verificationToken,
         UserName: this.oomiUsername,
         Password: this.oomiPassword,
       };
       await fetch('https://online.oomi.fi/eServices/Online/Login', {
         method: 'POST',
-        body: new url.URLSearchParams(params),
+        body: new url.URLSearchParams(loginParameters),
         headers: defaultHeaders,
       });
     } else {
-      throw 'no toks';
+      throw new Error('Could not extract verification token');
     }
   };
 
-  getData = async () => {
-    const body = {
-      customerCode: process.env.OOMI_CUSTOMER_CODE,
-      networkCode: process.env.OOMI_NETWORK_CODE,
-      meteringPointCode: process.env.OOMI_METERING_POINT_CODE,
-      enableTemperature: 'true',
-      enablePriceSeries: 'false',
-      enableTemperatureCorrectedConsumption: 'true',
-      mpSourceCompanyCode: '',
-      activeTarificationId: '',
-    };
+  getConsumption = async (): Promise<[number, number][]> => {
     const res = await fetch('https://online.oomi.fi/Reporting/CustomerConsumption/GetHourlyConsumption', {
       method: 'POST',
-      body: JSON.stringify(body),
+      body: JSON.stringify(oomiConsumptionRequest),
       headers: { ...defaultHeaders, 'Content-Type': 'application/json' },
     });
-    console.log(res);
-    const result = await res.json();
-    console.log(result);
+    const result: ConsumptionResponse = await res.json();
+    const [consumption] = result.Consumptions;
+    return consumption.Series.Data;
   };
 
-  logout = async () => {
+  logout = async (): Promise<void> => {
     await fetch('https://online.oomi.fi/eServices/Online/Logout', { headers: defaultHeaders });
   };
 }

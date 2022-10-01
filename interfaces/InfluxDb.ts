@@ -8,6 +8,6 @@ export interface InfluxDbSettings {
 }
 
 export enum InfluxDbProtocol {
-  HTTPS = "https",
-  HTTP = "http",
+  HTTPS = 'https',
+  HTTP = 'http',
 }

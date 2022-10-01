@@ -1,5 +1,5 @@
-import * as Influx from "influx";
-import { InfluxDbSettings } from "../interfaces/InfluxDb";
+import * as Influx from 'influx';
+import { InfluxDbSettings } from '../interfaces/InfluxDb';
 
 export class InfluxDbUploader {
   private client: Influx.InfluxDB;
@@ -18,25 +18,27 @@ export class InfluxDbUploader {
       database: settings.database,
       schema: [
         {
-          measurement: "consumption",
+          measurement: 'consumption',
           fields: {
             kwh: Influx.FieldType.FLOAT,
           },
-          tags: ["key"],
+          tags: ['key'],
         },
       ],
     });
   };
 
-  writeDataPoint = async (consumptionPairs: [number, number][]) => {
-    consumptionPairs.forEach(async ([timestamp, kwh]) => {
-      await this.client.writePoints([
-        {
-          measurement: "consumption",
-          fields: { kwh: kwh },
-          timestamp: new Date(timestamp),
-        },
-      ]);
-    });
+  writeDataPoints = async (consumptionPairs: [number, number][]): Promise<void[]> => {
+    return Promise.all(
+      consumptionPairs.map(async ([timestamp, kwh]) => {
+        await this.client.writePoints([
+          {
+            measurement: 'consumption',
+            fields: { kwh: kwh },
+            timestamp: new Date(timestamp),
+          },
+        ]);
+      })
+    );
   };
 }

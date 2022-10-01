@@ -12,3 +12,14 @@ export const influxSettings: InfluxDbSettings = {
   username: process.env.INFLUXDB_USERNAME,
   password: process.env.INFLUXDB_PASSWORD,
 };
+
+export const oomiConsumptionRequest = {
+  customerCode: process.env.OOMI_CUSTOMER_CODE,
+  networkCode: process.env.OOMI_NETWORK_CODE,
+  meteringPointCode: process.env.OOMI_METERING_POINT_CODE,
+  enableTemperature: 'true',
+  enablePriceSeries: 'false',
+  enableTemperatureCorrectedConsumption: 'true',
+  mpSourceCompanyCode: '',
+  activeTarificationId: '',
+};
