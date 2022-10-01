@@ -1,20 +1,16 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
+import { OomiDownloader } from './services/oomiDownloader';
 dotenv.config();
-import { consdata } from "./data";
-import { InfluxDbProtocol, InfluxDbSettings } from "./interfaces/InfluxDb";
-import { InfluxDbUploader } from "./services/influxDbUploader";
-
-const influxSettings: InfluxDbSettings = {
-  host: process.env.INFLUXDB_HOST || "localhost",
-  port: process.env.INFLUXDB_PORT ? parseInt(process.env.INFLUXDB_PORT) : 8086,
-  protocol: process.env.INFLUXDB_PROTOCOL as InfluxDbProtocol,
-  database: process.env.INFLUXDB_DATABASE || "Electricity",
-  username: process.env.INFLUXDB_USERNAME,
-  password: process.env.INFLUXDB_PASSWORD,
-};
+import { consdata } from './data';
+import { influxSettings } from './settings';
+import { InfluxDbUploader } from './services/influxDbUploader';
 
 const influx = new InfluxDbUploader(influxSettings);
 
 const [cons] = consdata.Consumptions;
 const data = cons.Series.Data as [number, number][];
-influx.writeDataPoint(data).then(() => console.log("done"));
+//influx.writeDataPoint(data).then((promises) => console.log(promises));
+if (process.env.OOMI_USERNAME && process.env.OOMI_PASSWORD) {
+  const oomi = new OomiDownloader(process.env.OOMI_USERNAME, process.env.OOMI_PASSWORD);
+  oomi.handler().then(() => console.log('d'));
+}
