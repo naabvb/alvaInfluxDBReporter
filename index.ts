@@ -5,6 +5,10 @@ import { OomiDownloader } from './services/oomiDownloader';
 import { InfluxDbUploader } from './services/influxDbUploader';
 import { exit } from 'process';
 
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => {};
+}
+
 if (process.env.OOMI_USERNAME && process.env.OOMI_PASSWORD) {
   console.log('Fetching data from Oomi');
   const oomiDownloader = new OomiDownloader(process.env.OOMI_USERNAME, process.env.OOMI_PASSWORD);
