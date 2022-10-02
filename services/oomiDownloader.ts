@@ -2,7 +2,7 @@ import { parse } from 'node-html-parser';
 import url from 'url';
 import { fetch } from './fetch';
 import { defaultHeaders, oomiConsumptionRequest } from '../settings';
-import { ConsumptionResponse } from '../interfaces/oomi';
+import { ConsumptionResponse } from '../interfaces/Oomi';
 
 export class OomiDownloader {
   private oomiUsername: string;

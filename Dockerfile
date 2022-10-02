@@ -15,6 +15,6 @@ FROM node:16-alpine
 WORKDIR /usr/app
 COPY package*.json ./
 COPY tsconfig.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
 COPY --from=builder /usr/app/dist /usr/app
 CMD ["node", "index.js"]
