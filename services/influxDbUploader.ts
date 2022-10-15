@@ -40,7 +40,8 @@ export class InfluxDbUploader {
    * @returns Shifted timestamp in milliseconds
    */
   shiftTimestamp = (timestamp: number) => {
-    const tzDifferenceInMinutes = DateTime.now().setZone(process.env.TZ).offset - DateTime.now().setZone('UTC').offset;
+    const tzDifferenceInMinutes =
+      DateTime.fromMillis(timestamp).setZone(process.env.TZ).offset - DateTime.now().setZone('UTC').offset;
     return DateTime.fromMillis(timestamp).minus({ minutes: tzDifferenceInMinutes }).toMillis();
   };
 
