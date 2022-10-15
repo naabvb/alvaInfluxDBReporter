@@ -28,17 +28,12 @@ export class InfluxDbUploader {
     });
   };
 
-  writeDataPoints = async (consumptionPairs: [number, number][]): Promise<void[]> => {
-    return Promise.all(
-      consumptionPairs.map(async ([timestamp, kwh]) => {
-        await this.client.writePoints([
-          {
-            measurement: 'consumption',
-            fields: { kwh: kwh },
-            timestamp: new Date(timestamp),
-          },
-        ]);
-      })
-    );
+  writeDataPoints = async (consumptionPairs: [number, number][]): Promise<void> => {
+    const points = consumptionPairs.map(([timestamp, kwh]) => ({
+      measurement: 'consumption',
+      fields: { kwh: kwh },
+      timestamp: new Date(timestamp),
+    }));
+    return await this.client.writePoints(points);
   };
 }

@@ -6,19 +6,19 @@ import { InfluxDbUploader } from './services/influxDbUploader';
 import { exit } from 'process';
 
 if (process.env.NODE_ENV === 'production') {
-  console.log = () => {};
+  console.debug = () => {};
 }
 
 if (process.env.OOMI_USERNAME && process.env.OOMI_PASSWORD) {
-  console.log('Fetching data from Oomi');
+  console.debug('Fetching data from Oomi');
   const oomiDownloader = new OomiDownloader(process.env.OOMI_USERNAME, process.env.OOMI_PASSWORD);
   oomiDownloader
     .getData()
     .then((data) => {
-      console.log('Starting influxDB update');
+      console.debug('Starting influxDB update');
       const influxDbUploader = new InfluxDbUploader(influxSettings);
       influxDbUploader.writeDataPoints(data).then(() => {
-        console.log('InfluxDB update complete, exiting');
+        console.debug('InfluxDB update complete, exiting');
         exit(0);
       });
     })
