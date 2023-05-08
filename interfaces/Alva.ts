@@ -1,5 +1,9 @@
 export interface ConsumptionResponse {
-  Consumptions: Consumption[];
+  Data: {
+    Hours: {
+      Consumptions: Consumption[];
+    };
+  };
 }
 
 export interface Consumption {

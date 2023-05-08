@@ -1,6 +1,6 @@
-# OomiInfluxDBReporter
+# AlvaInfluxDBReporter
 
-Small utility that fetches electricity consumption data from Oomi and uploads it to InfluxDB 1.8.
+Small utility that fetches electricity consumption data from Alva and uploads it to InfluxDB 1.8.
 
 ## Prerequisites
 
@@ -23,10 +23,8 @@ npm run install
 - INFLUXDB_USERNAME
 - INFLUXDB_PASSWORD
 - INFLUXDB_DATABASE
-- OOMI_USERNAME
-- OOMI_PASSWORD
-- OOMI_CUSTOMER_CODE
-- OOMI_NETWORK_CODE
-- OOMI_METERING_POINT_CODE
+- ALVA_USERNAME
+- ALVA_PASSWORD
+- ALVA_METERING_POINT_CODE
 - TZ
 ```

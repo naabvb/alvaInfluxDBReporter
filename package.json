@@ -1,26 +1,26 @@
 {
-  "name": "oomiinfluxdbreporter",
+  "name": "alvainfluxdbreporter",
   "version": "1.0.0",
-  "description": "Fetches electricity consumption data from OOMI and uploads it to InfluxDB",
+  "description": "Fetches electricity consumption data from Alva and uploads it to InfluxDB",
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
     "build": "tsc --build tsconfig.json",
     "dev": "nodemon index.ts",
-    "docker:build": "docker build . -t oomi-influxdb-reporter",
-    "docker:run": "docker run --rm --env-file .env --net=host --name oomi-influxdb-reporter oomi-influxdb-reporter:latest"
+    "docker:build": "docker build . -t alva-influxdb-reporter",
+    "docker:run": "docker run --rm --env-file .env --net=host --name alva-influxdb-reporter alva-influxdb-reporter:latest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/naabvb/oomiInfluxDBReporter.git"
+    "url": "git+https://github.com/naabvb/alvaInfluxDBReporter.git"
   },
   "keywords": [],
   "author": "Lauri Pimiä",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/naabvb/oomiInfluxDBReporter/issues"
+    "url": "https://github.com/naabvb/alvaInfluxDBReporter/issues"
   },
-  "homepage": "https://github.com/naabvb/oomiInfluxDBReporter#readme",
+  "homepage": "https://github.com/naabvb/alvaInfluxDBReporter#readme",
   "devDependencies": {
     "@types/luxon": "^3.0.1",
     "@types/node": "^18.7.23",

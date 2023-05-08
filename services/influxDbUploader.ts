@@ -35,7 +35,7 @@ export class InfluxDbUploader {
   };
 
   /**
-   * Calculates and corrects timestamp to wanted timezone. Necessary due to Oomi incorrectly reporting UTC+2/UTC+3 timestamps as UTC.
+   * Calculates and corrects timestamp to wanted timezone. Necessary due to Alva incorrectly reporting UTC+2/UTC+3 timestamps as UTC.
    * @param timestamp Timestamp in milliseconds
    * @returns Shifted timestamp in milliseconds
    */

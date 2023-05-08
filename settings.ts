@@ -13,13 +13,8 @@ export const influxSettings: InfluxDbSettings = {
   password: process.env.INFLUXDB_PASSWORD,
 };
 
-export const oomiConsumptionRequest = {
-  customerCode: process.env.OOMI_CUSTOMER_CODE,
-  networkCode: process.env.OOMI_NETWORK_CODE,
-  meteringPointCode: process.env.OOMI_METERING_POINT_CODE,
-  enableTemperature: 'true',
-  enablePriceSeries: 'false',
-  enableTemperatureCorrectedConsumption: 'true',
+export const alvaConsumptionRequest = {
+  mpCode: process.env.ALVA_METERING_POINT_CODE,
   mpSourceCompanyCode: '',
-  activeTarificationId: '',
+  startData: '2021-09-08',
 };
