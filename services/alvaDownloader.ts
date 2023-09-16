@@ -21,32 +21,41 @@ export class AlvaDownloader {
   };
 
   login = async (): Promise<void> => {
-    const indexResponse = await fetch('https://asiakas.alva.fi/eServices/Online/Login?ReturnUrl=/eServices/Online');
+    const loginParameters = {
+      __RequestVerificationToken: await this.parseVerificationToken(
+        'https://asiakas.alva.fi/eServices/Online/Login?ReturnUrl=/eServices/Online'
+      ),
+      UserName: this.alvaUsername,
+      Password: this.alvaPassword,
+      RememberMe: 'false',
+    };
+    await fetch('https://asiakas.alva.fi/eServices/Online/Login?ReturnUrl=/eServices/Online', {
+      method: 'POST',
+      body: new url.URLSearchParams(loginParameters),
+      headers: defaultHeaders,
+    });
+  };
+
+  parseVerificationToken = async (url: string): Promise<string> => {
+    const indexResponse = await fetch(url);
     const responseBody = await indexResponse.text();
     const parsedHtml = parse(responseBody);
-    const verificationToken = parsedHtml.querySelector('input[name=__RequestVerificationToken]')?.attributes.value;
-    if (verificationToken) {
-      const loginParameters = {
-        __RequestVerificationToken: verificationToken,
-        UserName: this.alvaUsername,
-        Password: this.alvaPassword,
-        RememberMe: 'false',
-      };
-      await fetch('https://asiakas.alva.fi/eServices/Online/Login?ReturnUrl=/eServices/Online', {
-        method: 'POST',
-        body: new url.URLSearchParams(loginParameters),
-        headers: defaultHeaders,
-      });
-    } else {
-      throw new Error('Could not extract verification token');
+    const token = parsedHtml.querySelector('input[name=__RequestVerificationToken]')?.attributes.value;
+    if (token) {
+      return token;
     }
+    throw new Error('Could not parse verification token');
   };
 
   getConsumption = async (): Promise<[number, number][]> => {
+    const params = {
+      ...alvaConsumptionRequest,
+      __RequestVerificationToken: await this.parseVerificationToken('https://asiakas.alva.fi/eServices/Online'),
+    };
     const res = await fetch('https://asiakas.alva.fi/Reporting/SessionlessConsumption/GetMpConsumptionModel', {
       method: 'POST',
-      body: JSON.stringify(alvaConsumptionRequest),
-      headers: { ...defaultHeaders, 'Content-Type': 'application/json' },
+      body: new url.URLSearchParams(params),
+      headers: defaultHeaders,
     });
     const result: ConsumptionResponse = await res.json();
     const [consumption] = result.Data.Hours.Consumptions;

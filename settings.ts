@@ -14,7 +14,6 @@ export const influxSettings: InfluxDbSettings = {
 };
 
 export const alvaConsumptionRequest = {
-  mpCode: process.env.ALVA_METERING_POINT_CODE,
-  mpSourceCompanyCode: '',
-  startData: '2021-09-08',
+  mpCode: process.env.ALVA_METERING_POINT_CODE!!,
+  startDate: '2021-09-08',
 };
