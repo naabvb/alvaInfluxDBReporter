@@ -13,6 +13,11 @@ RUN npm run build
 # Server
 FROM node:16-alpine
 WORKDIR /usr/app
+
+RUN apk add --no-cache ca-certificates
+# Use system CA store in Node. We need Entrust_OV and node 16 doesn't have it :(
+ENV NODE_OPTIONS=--use-openssl-ca
+
 COPY package*.json ./
 COPY tsconfig.json ./
 RUN npm install --omit=dev

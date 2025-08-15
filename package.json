@@ -4,9 +4,9 @@
   "description": "Fetches electricity consumption data from Alva and uploads it to InfluxDB",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node .",
+    "start": "NODE_OPTIONS=--use-openssl-ca node .",
     "build": "tsc --build tsconfig.json",
-    "dev": "nodemon index.ts",
+    "dev": "NODE_OPTIONS=--use-openssl-ca nodemon index.ts",
     "docker:build": "docker build . -t alva-influxdb-reporter",
     "docker:run": "docker run --rm --env-file .env --net=host --name alva-influxdb-reporter alva-influxdb-reporter:latest"
   },
